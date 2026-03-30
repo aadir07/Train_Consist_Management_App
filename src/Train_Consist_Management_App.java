@@ -1,21 +1,50 @@
-
-
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Train_Consist_Management_App {
+
+    // Inner Bogie class
+    static class Bogie {
+        String name;
+        int capacity;
+
+        Bogie(String name, int capacity) {
+            this.name = name;
+            this.capacity = capacity;
+        }
+    }
+
     public static void main(String[] args) {
 
-        System.out.println("=======================================");
-        System.out.println("=== Train Consist Management App ===");
-        System.out.println("=======================================\n");
+        System.out.println("========================================");
+        System.out.println(" UC7 - Sort Bogies by Capacity (Comparator) ");
+        System.out.println("========================================\n");
 
-        List<String> trainConsist = new ArrayList<>();
+        // Create list of bogies
+        List<Bogie> bogies = new ArrayList<>();
 
-        System.out.println("Train initialized successfully...");
-        System.out.println("Initial Bogie Count : " + trainConsist.size());
-        System.out.println("Current Train Consist : " + trainConsist + "\n");
+        // Add bogies
+        bogies.add(new Bogie("Sleeper", 72));
+        bogies.add(new Bogie("AC Chair", 56));
+        bogies.add(new Bogie("First Class", 24));
+        bogies.add(new Bogie("General", 90));
 
-        System.out.println("System ready for operations...");
+        // Before sorting
+        System.out.println("Before Sorting:");
+        for (Bogie bogie : bogies) {
+            System.out.println(bogie.name + " -> " + bogie.capacity);
+        }
+
+        // Sort by capacity
+        bogies.sort(Comparator.comparingInt(b -> b.capacity));
+
+        // After sorting
+        System.out.println("\nAfter Sorting by Capacity:");
+        for (Bogie bogie : bogies) {
+            System.out.println(bogie.name + " -> " + bogie.capacity);
+        }
+
+        System.out.println("\nUC7 sorting completed...");
     }
 }
