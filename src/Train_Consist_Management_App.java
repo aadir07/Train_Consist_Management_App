@@ -36,17 +36,14 @@ public class TrainConsistManagementApp {
 
     // ===== Goods Bogie =====
     static class GoodsBogie {
-        String shape;   // Rectangular / Cylindrical
-        String cargo;   // Assigned later
+        String shape;
+        String cargo;
 
         GoodsBogie(String shape) {
             this.shape = shape;
         }
 
-        // Runtime cargo assignment
         public void assignCargo(String cargo) throws UnsafeCargoException {
-            // Unsafe rule:
-            // Petroleum should NOT go into Rectangular bogie
             if (shape.equalsIgnoreCase("Rectangular") &&
                     cargo.equalsIgnoreCase("Petroleum")) {
 
@@ -54,13 +51,39 @@ public class TrainConsistManagementApp {
                         "Unsafe Cargo! Petroleum cannot be loaded in Rectangular Bogie"
                 );
             }
-
             this.cargo = cargo;
         }
 
         @Override
         public String toString() {
             return shape + " -> Cargo: " + (cargo == null ? "Not Assigned" : cargo);
+        }
+    }
+
+    // ===== UC16: Bubble Sort Method =====
+    public static void bubbleSort(int[] arr) {
+        int n = arr.length;
+
+        for (int i = 0; i < n - 1; i++) {
+            // Optimization: track if swap happens
+            boolean swapped = false;
+
+            for (int j = 0; j < n - i - 1; j++) {
+
+                // Compare adjacent elements
+                if (arr[j] > arr[j + 1]) {
+
+                    // Swap
+                    int temp = arr[j];
+                    arr[j] = arr[j + 1];
+                    arr[j + 1] = temp;
+
+                    swapped = true;
+                }
+            }
+
+            // If no swaps → already sorted
+            if (!swapped) break;
         }
     }
 
@@ -73,10 +96,11 @@ public class TrainConsistManagementApp {
         List<PassengerBogie> passengerBogies = new ArrayList<>();
         List<GoodsBogie> goodsBogies = new ArrayList<>();
 
-        // ===== UC14 Logic (Constructor Validation) =====
+        // ===== UC14 Logic =====
         try {
             passengerBogies.add(new PassengerBogie("Sleeper", 72));
             passengerBogies.add(new PassengerBogie("AC Chair", 56));
+            passengerBogies.add(new PassengerBogie("General", 60));
 
             // Invalid example
             passengerBogies.add(new PassengerBogie("First Class", 0));
@@ -85,14 +109,14 @@ public class TrainConsistManagementApp {
             System.out.println("Exception Caught (Capacity): " + e.getMessage());
         }
 
-        // ===== Create Goods Bogies =====
+        // ===== Goods Bogies =====
         GoodsBogie g1 = new GoodsBogie("Rectangular");
         GoodsBogie g2 = new GoodsBogie("Cylindrical");
 
         goodsBogies.add(g1);
         goodsBogies.add(g2);
 
-        // ===== UC15 Logic (Runtime Safety Handling) =====
+        // ===== UC15 Logic =====
         for (GoodsBogie g : goodsBogies) {
             try {
                 if (g.shape.equals("Rectangular")) {
@@ -111,17 +135,33 @@ public class TrainConsistManagementApp {
             }
         }
 
-        // ===== Display Results =====
+        // ===== Display Passenger Bogies =====
         System.out.println("\nPassenger Bogies:");
         for (PassengerBogie b : passengerBogies) {
             System.out.println(b);
         }
 
-        System.out.println("\nGoods Bogies:");
+        // ===== UC16: Extract capacities into array =====
+        int[] capacities = new int[passengerBogies.size()];
+        for (int i = 0; i < passengerBogies.size(); i++) {
+            capacities[i] = passengerBogies.get(i).capacity;
+        }
+
+        // ===== Apply Bubble Sort =====
+        bubbleSort(capacities);
+
+        // ===== Display Sorted Capacities =====
+        System.out.println("\nSorted Passenger Capacities (Bubble Sort):");
+        for (int cap : capacities) {
+            System.out.print(cap + " ");
+        }
+
+        // ===== Goods Bogies =====
+        System.out.println("\n\nGoods Bogies:");
         for (GoodsBogie g : goodsBogies) {
             System.out.println(g);
         }
 
-        System.out.println("\nUC15 execution completed...");
+        System.out.println("\nUC16 execution completed...");
     }
 }
